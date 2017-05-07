@@ -100,3 +100,43 @@ some string
 ```
 As shown in above example the class function-definition \__call\__ is called
 whenever you invoke `callable("some argument")` with some argument.
+
+#### Lambda functions:
+This was actually quite interesting. I'd heard of Lambda functions before,
+but I've never really done anything with them. They seem quite straight-
+forward though.
+Basically you use lambda functions as an anonymous, throwaway function.
+
+Consider this:
+```
+names = ["Bethany Ditzel", "Joakim Bajoul", "Bork Borkins", "Fredrik Edlund"]
+
+#print names sorted on the last name
+print(sorted(names, key=lambda NAMES: NAMES.split()[-1]))
+#print names sorted on the first name
+print(sorted(names, key=lambda NAMES: NAMES.split()[0]))
+```
+
+or:
+
+```
+def adder(x):
+    return lambda y: x + y
+add5 = adder(5)
+add5(1)
+6
+```
+
+Lambda functions are great for developers to nest functions in other
+functions.
+
+In the second example we have a function `adder` that returns
+the sum of x and y. However y isn't set to a value in it's
+function body (x is supplied in the function's parameter).
+
+So after the `adder` has been invoked the first time (`add5 = adder(5)`) we
+can rewrite the return of the function like this:
+`return lambda y: 5 + y` since y hasn't been supplied.
+
+During this time we have also assigned the function `adder` to `add5`
+so if we call `add5` with 1 (`add5(1)`) we are supplying it with a y-value.

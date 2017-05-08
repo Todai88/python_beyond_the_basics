@@ -140,3 +140,55 @@ can rewrite the return of the function like this:
 
 During this time we have also assigned the function `adder` to `add5`
 so if we call `add5` with 1 (`add5(1)`) we are supplying it with a y-value.
+
+#### Extended Formal Arguments Syntax:
+
+Executing the file `extended_arguments.py` in 02/other-files we notice a few things:
+1. `*args` are returned as a class tuple
+2. That the class is callable. 
+
+Knowing this it's a matter of iterating over the items in the tuple (args)
+to manipulate the objects.
+
+
+Here are some requirements when working with `*args` and `**kwargs`:
+
+1. If *args is present it must precede **kwargs or a syntax error will be thrown during compilation.
+     <br><br>
+     &nbsp;&nbsp;&nbsp;&nbsp; __Ie. this isn't allowed:__ `def print_args(**kwargs, *args)`
+2. Any arguments preceding `*args` will be considered regualr positional arguments:
+     
+    ```
+        def print(arg1, arg2, *args):
+            print(arg1)
+            print(arg2)
+            print(args)
+            print(type(args))
+      ```
+      
+3. Any regular positional arguments passed __AFTER__ `*args` are considered mandatory keyword arguments.
+Failure to do so results in a type error:
+```buildoutcfg
+def print_args(arg1, arg2, *args, kwarg1, kwarg2):
+    print(arg1)
+    print(arg2)
+    print(args)
+    print(kwarg1)
+    print(kwarg2)
+print_args(1, 2, 3, 4, 5, kwarg1=6, kwarg2=7) # OK
+print_args(1, 2, 3, 4, 5, 6, 7)               # Type error
+```
+
+4. If used `**kwargs` must be the last argument in the function, after both `*args` and any 
+potential regular positional arguments:
+```buildoutcfg
+def print_args(arg1, arg2, *args, kwarg1, kwarg2, **kwargs):
+    print(arg1)
+    print(arg2)
+    print(args)
+    print(kwarg1)
+    print(kwarg2)
+    print(kwargs)
+print_args(1, 2, 3, 4, 5, kwarg1=6, kwarg2=7, kwarg3=8, kwarg9=10) # OK
+def print_args(arg1, arg2, *args, kwarg1, kwarg2, **kwargs, kwargs10) # invalid syntax error
+```

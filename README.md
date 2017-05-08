@@ -290,3 +290,130 @@ transposed = list(zip(col))
 #               (2, 5, 8),
 #               (3, 6, 9)]
 ```
+
+----
+
+<br>
+
+03 - Closures and decorators
+----
+
+#### 01: Local functions:
+
+A named function like `def sort(list):` will create a reference to a memory address every 
+time it is executed.
+
+__LEGB__ rule: Local, Enclosing, Global, Built-in.
+```buildoutcfg
+"""
+Global scope
+"""
+PI = TAU / 2
+
+def func(x):
+    """
+    Enclosing scope
+    """
+    def local_func(n):
+        """
+        Local scope
+        """
+        a = 'hello'
+        return a + n
+    y = 2
+    return x + y
+```
+
+How are local functions useful?
+
+Useful for specialized, one-off functions like sorting-key functions.
+They also aid in code organization and readability.
+Similar to lambdas, but more general (may contain multiple expressions and statements)
+
+#### Returning Functions From Functions:
+Remember how we mentioned that a local function has a reference to its memory address?
+Because of that we can return a local function from its wrapping function much in
+the same way we can return any other datatype.
+
+#### Closures and Nested Scopes:
+
+This was really interesting as is showed how closures work.
+
+Consider this code:
+```buildoutcfg
+def enclosing():
+    x = 'closed'
+    def local_func():
+        print(x)
+    return local_func
+```
+We know that `local_func()` can access `x` in its scope because of the LEGB rule. 
+But how?
+Imagine we had imported `enclosing()` and are running a python shell:
+ ```buildoutcfg
+>>> lf = enclosing()
+>>> lf() 
+closed over
+>>> lf.__closeure__
+(<cell at 0x10ea95cc8: str object at 0x10eac19f0>,)
+```
+After calling __closure__ on the `enclosing()` object we can see that it shows us the memory allocation
+of a string object inside of its scope, `x`.
+
+
+#### Function factories
+
+Really interesting too!
+
+Remember the LEGB rule. And look at this code:
+```buildoutcfg
+def raise_to(exp):
+    def raise_to_exp(x):
+        return pow(x, exp)
+    return raise_to_exp
+```
+We already know that we can return functions in functions. But what we migth not know
+is that a returned function that has been instantiated by a parameter of its
+wrapping function still keeps that parameter in memory.
+
+In the case of the code above we can see that `raise_to_exp` returns the POW of 
+two items, `x` and `exp`. `exp` was the argument of its wrapping function `raise_to_exp`.
+Because of that `raise_to_exp` has access to a reference to that argument's memory allocation.
+
+So if we imagine we have imported `raise_to_exp` and run a shell:
+
+```buildoutcfg
+>>> squared = raise_to(2)
+```
+then square will basically be: 
+```buildoutcfg
+def raise_to_exp(x):
+    return pow(x, 2)
+```
+So if we call square with:
+```buildoutcfg
+>>> squared(3)
+9
+>>> sqiared(2)
+4
+```
+If we created a new reference to `raise_to`:
+```buildoutcfg
+>>> cubed = raise_to(3)
+```
+Then cubed would be a reference to the memory allocation of:
+```buildoutcfg
+def raise_to_exp(x):
+    return pow(x, 3)
+```
+And run it like:
+```buildoutcfg
+>>> cubed(3)
+27
+```
+
+So basically what has happend is that you create two different variables
+that hold a reference to two separate instances of the function `raise_to_exp(x)`,
+each with its own individual reference to the argument `exp` too. 
+
+These references are saved in your RAM.

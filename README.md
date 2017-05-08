@@ -101,6 +101,8 @@ some string
 As shown in above example the class function-definition \__call\__ is called
 whenever you invoke `callable("some argument")` with some argument.
 
+----
+
 #### Lambda functions:
 This was actually quite interesting. I'd heard of Lambda functions before,
 but I've never really done anything with them. They seem quite straight-
@@ -140,6 +142,8 @@ can rewrite the return of the function like this:
 
 During this time we have also assigned the function `adder` to `add5`
 so if we call `add5` with 1 (`add5(1)`) we are supplying it with a y-value.
+
+----
 
 #### Extended Formal Arguments Syntax:
 

@@ -196,3 +196,97 @@ def print_args(arg1, arg2, *args, kwarg1, kwarg2, **kwargs):
 print_args(1, 2, 3, 4, 5, kwarg1=6, kwarg2=7, kwarg3=8, kwarg9=10) # OK
 def print_args(arg1, arg2, *args, kwarg1, kwarg2, **kwargs, kwargs10) # invalid syntax error
 ```
+----
+
+#### Forwarding arguments
+
+Short module.
+Covers how to use unpacked collections as arguments. 
+
+See 02/forwarding_arguments.py:
+
+```buildoutcfg
+## this is a good implementation of a function as it soaks up any potential trailing arguments
+
+def color(red, green, blue, **kwargs):
+    print("r=", red)
+    print("g=", green)
+    print("b=", blue)
+    print(kwargs)
+    
+def test(arg1 , arg2, *args):
+    print(arg1)
+    print(arg2)
+    print(args)
+    
+t = (11, 12, 13, 14, 15, 16)
+k = {'red': 20, 'green': 30, 'blue': 40, 'alpha': 50, 'beta': 60}
+
+test(*t) # star unpacks the collection into positional arguments
+print("first finished!")
+color(**k) # double start unpacks the collection into a dictionary with named arguments
+```
+
+----
+
+#### Duck Tail: Transposing Tables
+
+This was fucking awesome!
+
+So in the previous module I learnt how to unpack collections. This module ties it up well.
+
+Consider these two lists:
+```buildoutcfg
+first  = [1, 2, 3]
+second = [4, 5, 6]
+```
+Using `zip` we can zip the two lists together:
+```buildoutcfg
+(1, 4)
+(2, 5)
+(3, 6)
+```
+Zip can also handle multiple series:
+```buildoutcfg
+third = [7, 8, 9]
+zip(first, second, third)
+(1, 4, 7)
+(2, 5, 8)
+(3, 6, 9)
+```
+If we then create a list of the three lists `col = [first, second, third]` we would end up with
+something quite clumpy. Consider printing that:
+```
+for item in zip(col[0], col[1], col[2]:
+    print(item)
+```
+It simply looks quite clumpsy... But what if we implement the unpacking we learned earlier?
+```buildoutcfg
+for item in zip(*col):
+    print(item)
+```
+Or if we create our own datastructure (primitive, I know..):
+```buildoutcfg
+placeholder = list(zip(*col))
+print(placeholder)
+```
+
+Both work fine and looks a lot more refined.
+
+This technique is called transpositioning and basically transposes rows into columns:
+```buildoutcfg
+first  = [1, 2, 3]
+second = [4, 5, 6]
+third  = [7, 8, 9]
+col = [first, second, third]
+
+# col = [[1, 2, 3,], 
+#        [4, 5, 6], 
+#        [7, 8, 9]]
+
+transposed = list(zip(col))
+
+# transposed = [(1, 4, 7),
+#               (2, 5, 8),
+#               (3, 6, 9)]
+```

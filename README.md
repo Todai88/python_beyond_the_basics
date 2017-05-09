@@ -417,3 +417,62 @@ that hold a reference to two separate instances of the function `raise_to_exp(x)
 each with its own individual reference to the argument `exp` too. 
 
 These references are saved in your RAM.
+
+#### Decorators
+
+Implemented as callables that take and return other callabls
+The @-symbol is used to describe a decorator.
+
+Consider this code:
+
+```buildoutcfg
+@my_decorator # references to a function with the name 'my_decorator'
+def my_function(x, y):
+    return x + y
+```
+```buildoutcfg
+def my_decorator(f):
+    ...
+    return new _f # remember we need to return a callable (in this case a function!)
+```
+
+* Replace, enhance or modify existing functions
+* Does not change the original function definition
+* Calling code doesn't need to change
+* Decorator mechanism uses the modified function's original name.
+
+-----
+
+#### Decorator (cont...)
+
+Consider if you had to refactor this code that returns an ascii representation of strings:
+```buildoutcfg
+def vegetable():
+    return ascii('blomkål') 
+    
+def animal():
+    return ascii('björn') 
+    
+def mineral():
+    return ascii('stål')
+```
+You can do this by using a sort of factory function and referencing to it with the @-decorator:
+```buildoutcfg
+def escape_unicode(f):
+    def wrap(*args, **kwargs):
+        x = f(*args, **kwargs)
+        return ascii(x)
+    return wrap
+    
+@excape_unicode # use escape_unicode as a decorator
+def northern_city():
+    return 'Tromsö'
+```
+
+You can also use Decorators to reference to an instance of a class.
+If you have overridden \__call\__ in your class you can then use a decorator to refer 
+to that class. 
+Using this structure allows you to keep track of functions and add variables that might otherwise 
+be out of the function's scope.
+They can also be used to wrap a function with a timer or even to lock variables in case of
+multi threading.

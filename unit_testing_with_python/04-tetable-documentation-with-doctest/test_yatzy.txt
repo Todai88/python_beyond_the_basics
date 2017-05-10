@@ -1,0 +1,52 @@
+>>> from yatzy import *
+
+>>> get_highest_individual_score([1, 1, 2, 3, 3])
+6
+
+
+>>> sorted(dice_counts([1, 2, 2, 3, 3]).items())
+[(1, 1), (2, 2), (3, 2), (4, 0), (5, 0), (6, 0)]
+
+>>> dice_counts("hej")
+Traceback (most recent call last):
+    ...
+TypeError: must be str, not int
+
+>>> yatzy([1, 1, 1, 1, 1])
+50
+>>> yatzy([4, 4, 4, 4, 4])
+50
+
+Incorrect usage:
+>>> yatzy([4, 4, 4, 4, 1])
+0
+
+>>> small_straight([1, 2, 3, 4, 5])
+15
+>>> small_straight([1, 2, 3, 4, 4])
+0
+
+It handles lists and sets:
+
+>>> small_straight({1, 2, 3, 4, 5})
+15
+
+It also handles unsorted lists:
+
+>>> small_straight([5, 4, 2, 3, 1])
+15
+
+
+>>> full_house([1, 1, 2, 2, 2])
+8
+>>> full_house([6, 6, 6, 2, 2])
+22
+
+>>> full_house([1, 2, 3, 4, 5])
+0
+>>> full_house([1, 2, 2, 1, 3])
+0
+
+
+>>> scores_in_categories([1, 1, 2, 2, 2])
+[(8, 'full_house'), (6, 'get_highest_individual_score')]

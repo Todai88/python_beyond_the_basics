@@ -95,3 +95,56 @@ You let your test code and development code merge. An iterative and incremental 
 Instead of developing either of the two parts of your development (code and tests) separately
 they are handled as one and the same. You might start with a basic test that 
 tests your constructor and then you take it from there.
+
+
+04-testable-documentation-with-doctest:
+----
+
+A few ways of writing doctest tests:
+
+__1. In the docstring:__ 
+
+```buildoutcfg
+def full_house(dice):
+    """
+    @param 
+        dice: a collection of integers indicating the dice(s) rolled.
+    @return: 
+        an integer score
+        
+    >>> full_house([1, 1, 2, 2, 2])
+    8
+    >>> full_house([6, 6, 6, 2, 2])
+    22
+    
+    Incorrect usage.
+        
+    >>> full_house([1, 2, 3, 4, 5])
+    0
+    >>> full_house([1, 2, 2, 1, 3])
+    0
+    """
+    tmp_count = dice_counts(dice)
+    if 2 in tmp_count.values() and 3 in tmp_count.values():
+        return sum(dice)
+    return 0
+```
+
+__2. In a separate file (.txt):__
+```buildoutcfg  
+    >>> full_house([1, 1, 2, 2, 2])
+    8
+    >>> full_house([6, 6, 6, 2, 2])
+    22
+    
+    Failing tests:
+        
+    >>> full_house([1, 2, 3, 4, 5])
+    0
+    >>> full_house([1, 2, 2, 1, 3])
+    0
+```
+
+Separating your concerns, your code in .py files and tests in separate file(s) will make
+your code compile quicker as otherwise the compilator will have to make time to 
+compile your file's `__doc__`.  
